@@ -70,8 +70,8 @@ namespace Plugin.FilePluginProvider
 
 					foreach(String extension in FilePluginArgs.LibraryExtensions)
 					{
-						FileSystemWatcher watcher = new FileSystemWatcher(pluginPath, extension);
-						watcher.Changed += new FileSystemEventHandler(Monitor_Changed);
+						FileSystemWatcher watcher = new FileSystemWatcher(pluginPath, "*" + extension);
+						watcher.Changed += new FileSystemEventHandler(this.Monitor_Changed);
 						watcher.EnableRaisingEvents = true;
 						this._monitors.Add(watcher);
 					}
@@ -87,7 +87,7 @@ namespace Plugin.FilePluginProvider
 			foreach(String pluginPath in this._args.PluginPath)
 				if(Directory.Exists(pluginPath))
 					foreach(String file in Directory.GetFiles(pluginPath, "*.*", SearchOption.AllDirectories))//Поиск только файлов с расширением .dll
-						if(this._args.CheckFileExtension(file))
+						if(FilePluginArgs.CheckFileExtension(file))
 						try
 						{
 							AssemblyName name = AssemblyName.GetAssemblyName(file);
@@ -126,7 +126,7 @@ namespace Plugin.FilePluginProvider
 		/// <param name="mode">The mode how plugin is connected.</param>
 		private void LoadPlugin(String filePath, ConnectMode mode)
 		{
-			if(!this._args.CheckFileExtension(filePath))
+			if(!FilePluginArgs.CheckFileExtension(filePath))
 				this.Trace.TraceInformation("Try to load file with unsupported extension. FilePath: {0}", filePath);
 			else
 				try
