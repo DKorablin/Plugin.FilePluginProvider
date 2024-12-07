@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netstandard2.0</TargetFramework>
+		<OutputType>Library</OutputType>
+		<RootNamespace>Plugin.FilePluginProvider</RootNamespace>
+		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
+		<AssemblyTitle>Plugin.FilePluginProvider</AssemblyTitle>
+		<Company>Danila Korablin</Company>
+		<Product>Plugin provider from file system</Product>
+		<Copyright>Copyright © Danila Korablin 2010-2024</Copyright>
+		<Configuration>Debug</Configuration>
+		<AssemblyVersion>1.1.*</AssemblyVersion>
+		<FileVersion>1.1.0.0</FileVersion>
+		<Deterministic>false</Deterministic>
+	</PropertyGroup>
+	<ItemGroup>
+		<Reference Include="SAL.Flatbed">
+			<HintPath>..\..\SAL\bin\SAL.Flatbed.dll</HintPath>
+			<Private>False</Private>
+		</Reference>
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Include="..\PluginProviders.Shared\FilePluginArgs.cs">
+			<Link>FilePluginArgs.cs</Link>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="SAL.Flatbed" Version="1.2.9" />
+		<PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
+	</ItemGroup>
+</Project>
