@@ -1,31 +1,52 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>netstandard2.0</TargetFramework>
+		<TargetFrameworks>net35;netstandard2.0</TargetFrameworks>
 		<OutputType>Library</OutputType>
 		<RootNamespace>Plugin.FilePluginProvider</RootNamespace>
-		<GenerateAssemblyInfo>true</GenerateAssemblyInfo>
-		<AssemblyTitle>Plugin.FilePluginProvider</AssemblyTitle>
-		<Company>Danila Korablin</Company>
-		<Product>Plugin provider from file system</Product>
-		<Copyright>Copyright © Danila Korablin 2010-2024</Copyright>
-		<Configuration>Debug</Configuration>
-		<AssemblyVersion>1.1.*</AssemblyVersion>
-		<FileVersion>1.1.0.0</FileVersion>
+		<Configuration>Release</Configuration>
 		<Deterministic>false</Deterministic>
+		<GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
+		<GenerateDocumentationFile>False</GenerateDocumentationFile>
+		<CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
 	</PropertyGroup>
+
+	<!--nuspec-->
+	<PropertyGroup>
+		<PackageId>AlphaOmega.SAL.Plugin.FilePluginProvider</PackageId>
+		<Version>$(Version)</Version>
+		<Title>Plugin provider from file system</Title>
+		<Description>Basic plugin provider, that will load all found assemblies to AppDoamin and will try to find IPlugin interface</Description>
+		<Authors>Danila Korablin</Authors>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageReadmeFile>docs\README.md</PackageReadmeFile>
+		<PackageIcon>docs\SAL.100.png</PackageIcon>
+		<RepositoryUrl>https://github.com/DKorablin/Plugin.FilePluginProvider</RepositoryUrl>
+		<PackageTags>SAL,Plugin,Provider</PackageTags>
+	</PropertyGroup>
+
 	<ItemGroup>
-		<Reference Include="SAL.Flatbed">
-			<HintPath>..\..\SAL\bin\SAL.Flatbed.dll</HintPath>
-			<Private>False</Private>
-		</Reference>
+		<None Include="..\README.md" Pack="true" PackagePath="\docs" />
+		<None Include="..\Images.Shared\SAL.100.png" Pack="true" PackagePath="\docs" />
 	</ItemGroup>
+
+	<ItemGroup>
+		<AssemblyAttributes Include="AssemblyMetadata" Condition="'$(TargetFramework)'=='netstandard2.0'">
+			<_Parameter1>ProjectUrl</_Parameter1>
+			<_Parameter2>https://github.com/DKorablin/Plugin.FilePluginProvider</_Parameter2>
+		</AssemblyAttributes>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="SAL.Flatbed">
+			<ExcludeAssets>runtime</ExcludeAssets>
+		</PackageReference>
+		<PackageReference Include="System.Configuration.ConfigurationManager" Condition="'$(TargetFramework)'=='netstandard2.0'" />
+		<Reference Include="System.Configuration" Condition="'$(TargetFramework)' == 'net35'" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<Compile Include="..\PluginProviders.Shared\FilePluginArgs.cs">
 			<Link>FilePluginArgs.cs</Link>
 		</Compile>
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="SAL.Flatbed" Version="1.2.10" />
-		<PackageReference Include="System.Configuration.ConfigurationManager" Version="7.0.0" />
 	</ItemGroup>
 </Project>
