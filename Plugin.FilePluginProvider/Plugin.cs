@@ -13,15 +13,13 @@ namespace Plugin.FilePluginProvider
 	{
 		private readonly IHost _host;
 
-		private TraceSource _trace;
-
 		/// <summary>Arguments transferred from source application</summary>
 		private FilePluginArgs _args;
 
 		/// <summary>New plugins appearance monitor</summary>
 		private List<FileSystemWatcher> _monitors;
 
-		private TraceSource Trace { get => this._trace ?? (this._trace = Plugin.CreateTraceSource<Plugin>()); }
+		private ITraceSource Trace { get; }
 
 		/// <summary>Parent plugin provider</summary>
 		IPluginProvider IPluginProvider.ParentProvider { get; set; }
@@ -29,8 +27,11 @@ namespace Plugin.FilePluginProvider
 		/// <summary>Create instance of <see cref="Plugin"/> with reference to the host instance.</summary>
 		/// <param name="host">The host instance.</param>
 		/// <exception cref="ArgumentNullException">The host instance should be specified.</exception>
-		public Plugin(IHost host)
-			=> this._host = host ?? throw new ArgumentNullException(nameof(host));
+		public Plugin(IHost host, ITraceSource trace)
+		{
+			this._host = host ?? throw new ArgumentNullException(nameof(host));
+			this.Trace = trace ?? throw new ArgumentNullException(nameof(trace));
+		}
 
 		Boolean IPlugin.OnConnection(ConnectMode mode)
 		{
@@ -127,7 +128,7 @@ namespace Plugin.FilePluginProvider
 		private void LoadPlugin(String filePath, ConnectMode mode)
 		{
 			if(!FilePluginArgs.CheckFileExtension(filePath))
-				this.Trace.TraceInformation("Try to load file with unsupported extension. FilePath: {0}", filePath);
+				this.Trace.TraceEvent(TraceEventType.Information, 0, "Try to load file with unsupported extension. FilePath: {0}", filePath);
 			else
 				try
 				{
@@ -148,15 +149,6 @@ namespace Plugin.FilePluginProvider
 					exc.Data.Add("Library", filePath);
 					this.Trace.TraceData(TraceEventType.Error, 1, exc);
 				}
-		}
-
-		private static TraceSource CreateTraceSource<T>(String name = null) where T : IPlugin
-		{
-			TraceSource result = new TraceSource(typeof(T).Assembly.GetName().Name + name);
-			result.Switch.Level = SourceLevels.All;
-			result.Listeners.Remove("Default");
-			result.Listeners.AddRange(System.Diagnostics.Trace.Listeners);
-			return result;
 		}
 	}
 }

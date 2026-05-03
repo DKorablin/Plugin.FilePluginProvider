@@ -5,4 +5,3 @@ using System.Runtime.InteropServices;
 [assembly: System.CLSCompliant(true)]
 
 [assembly: AssemblyDescription("Plugin loader from file system")]
-[assembly: AssemblyCopyright("Copyright © Danila Korablin 2010-2025")]
